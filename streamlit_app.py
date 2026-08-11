@@ -7,7 +7,7 @@ st.write("Upload an image of a white blood cell to classify and save it.")
 
 MODEL_PATH = "wbc_model.keras"
 # Replace the string below with your exact copied Google Drive share link
-DRIVE_LINK = "/content/VTSP_wbc_classifier"
+DRIVE_LINK = "https://drive.google.com/file/d/1gDXUkR-nZtbrJSjnUfSYG51X4Ug7Yljy/view?usp=drive_link"
 
 
 # 1. File Uploader Interface

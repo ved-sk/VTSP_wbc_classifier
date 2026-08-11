@@ -2,3 +2,7 @@ streamlit
 tensorflow>=2.16.1
 Pillow
 gdown
+tf-keras
+pillow
+gdown
+numpy

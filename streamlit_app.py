@@ -9,7 +9,7 @@ MODEL_PATH = "wbc_model.keras"
 # Replace the string below with your exact copied Google Drive share link
 DRIVE_LINK = "https://drive.google.com/file/d/1gDXUkR-nZtbrJSjnUfSYG51X4Ug7Yljy/view?usp=drive_link"
 
-
+model = load_my_model()
 # 1. File Uploader Interface
 uploaded_file = st.file_uploader("Choose a WBC image...", type=["jpg", "jpeg", "png"])
 

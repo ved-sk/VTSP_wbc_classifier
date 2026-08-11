@@ -10,7 +10,7 @@ st.title("White Blood Cell Classifier")
 st.write("Upload an image of a white blood cell to classify and save it.")
 
 # 2. File and Link Configurations
-MODEL_PATH = "wbc_model.keras"
+MODEL_PATH = "wbc_model.h5"
 DRIVE_LINK = "https://google.com"
 
 # 3. Model Loading Function

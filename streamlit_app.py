@@ -5,6 +5,11 @@ import os
 st.title("White Blood Cell Classifier")
 st.write("Upload an image of a white blood cell to classify and save it.")
 
+MODEL_PATH = "wbc_model.keras"
+# Replace the string below with your exact copied Google Drive share link
+DRIVE_LINK = "/content/VTSP_wbc_classifier"
+
+
 # 1. File Uploader Interface
 uploaded_file = st.file_uploader("Choose a WBC image...", type=["jpg", "jpeg", "png"])
 

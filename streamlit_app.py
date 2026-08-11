@@ -55,4 +55,4 @@ if uploaded_file is not None and model is not None:
 predictions = model.predict(img_array)
         
         # Display raw output values
-        st.write(f"Raw Prediction Outputs: {predictions}")
+st.write(f"Raw Prediction Outputs: {predictions}")

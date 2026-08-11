@@ -10,8 +10,8 @@ st.title("White Blood Cell Classifier")
 st.write("Upload an image of a white blood cell to classify and save it.")
 
 # 2. File and Link Configurations
-MODEL_PATH = "wbc_model.keras"
-DRIVE_LINK = "https://google.com"
+MODEL_PATH = "wbc_model.h5"
+DRIVE_LINK = "https://drive.google.com"
 
 # 3. Model Loading Function
 @st.cache_resource
@@ -52,7 +52,25 @@ if uploaded_file is not None and model is not None:
         img_array = tf.keras.preprocessing.image.img_to_array(img_resized)
         img_array = tf.expand_dims(img_array, 0) # Format as an image batch
         
+# Execute model prediction
 predictions = model.predict(img_array)
         
-        # Display raw output values
-st.write(f"Raw Prediction Outputs: {predictions}")
+# Map raw prediction values to user-friendly categorical indices
+predicted_class_idx = np.argmax(predictions)
+confidence_score = np.max(predictions) * 100 
+        
+        # Define output dictionary category strings
+CLASS_NAMES = ['EOSINOPHIL', 'LYMPHOCYTE', 'MONOCYTE', 'NEUTROPHIL']
+        
+if predicted_class_idx < len(CLASS_NAMES):
+    result_label = CLASS_NAMES[predicted_class_idx]
+else:
+    result_label = f"Unknown Index ({predicted_class_idx})"
+            
+        # Display the formal prediction blocks
+st.write("---")
+st.subheader("Classification Results")
+st.metric(label="Predicted WBC Type", value=result_label)
+st.write(f"**Confidence Score / Model Certainty:** {confidence_score:.2f}%")
+st.progress(int(confidence_score) / 100)
+

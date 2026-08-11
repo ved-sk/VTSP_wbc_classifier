@@ -52,24 +52,7 @@ if uploaded_file is not None and model is not None:
         img_array = tf.keras.preprocessing.image.img_to_array(img_resized)
         img_array = tf.expand_dims(img_array, 0) # Format as an image batch
         
-        # Execute model prediction
-        predictions = model.predict(img_array)
+predictions = model.predict(img_array)
         
-        # Map raw prediction values to user-friendly categorical indices
-        predicted_class_idx = np.argmax(predictions)
-        confidence_score = np.max(predictions) * 100 
-        
-        # Define output dictionary category strings
-        CLASS_NAMES = ['EOSINOPHIL', 'LYMPHOCYTE', 'MONOCYTE', 'NEUTROPHIL']
-        
-        if predicted_class_idx < len(CLASS_NAMES):
-            result_label = CLASS_NAMES[predicted_class_idx]
-        else:
-            result_label = f"Unknown Index ({predicted_class_idx})"
-            
-        # Display the formal prediction blocks
-        st.write("---")
-        st.subheader("Classification Results")
-        st.metric(label="Predicted WBC Type", value=result_label)
-        st.write(f"**Confidence Score / Model Certainty:** {confidence_score:.2f}%")
-        st.progress(int(confidence_score) / 100)
+        # Display raw output values
+        st.write(f"Raw Prediction Outputs: {predictions}")

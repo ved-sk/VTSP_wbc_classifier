@@ -26,7 +26,7 @@ def load_my_model():
     return tf.keras.models.load_model(MODEL_PATH)
 
 # Initialize model globally
-model = load_my_model()
+# model = load_my_model()
 
 # 4. Image Uploader UI Element
 uploaded_file = st.file_uploader("Choose a WBC image...", type=["jpg", "jpeg", "png"])

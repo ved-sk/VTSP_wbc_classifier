@@ -19,7 +19,7 @@ def load_my_model():
     if not os.path.exists(MODEL_PATH):
         with st.spinner("Downloading trained model weights from Google Drive... Please wait."):
             try:
-                gdown.download(DRIVE_LINK, MODEL_PATH, quiet=False, fuse=False, fuzzy=True)
+                gdown.download(DRIVE_LINK, MODEL_PATH, quiet=False, fuzzy=True)
             except Exception as e:
                 st.error(f"Download failed: {e}")
                 return None
@@ -60,7 +60,7 @@ if uploaded_file is not None and model is not None:
         confidence_score = np.max(predictions) * 100 
         
         # Define output dictionary category strings
-        CLASS_NAMES = ['Eosinophil', 'Lymphocyte', 'Monocyte', 'Neutrophil']
+        CLASS_NAMES = ['EOSINOPHIL', 'LYMPHOCYTE', 'MONOCYTE', 'NEUTROPHIL']
         
         if predicted_class_idx < len(CLASS_NAMES):
             result_label = CLASS_NAMES[predicted_class_idx]

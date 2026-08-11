@@ -17,7 +17,7 @@ MODEL_PATH = "wbc_model.h5"
 
 # UPDATE THIS: Use a direct shareable Google Drive file URL or direct download link
 # Example format: "https://drive.google.com/uc?id=YOUR_FILE_ID_HERE"
-DRIVE_LINK = "https://drive.google.com/file/d/1HorMh00ZxmilZ9JGs9YyR1MNjUAewEFE/view?usp=drive_link"
+DRIVE_LINK = "https://google.com"
 
 
 CLASS_NAMES = ['EOSINOPHIL', 'LYMPHOCYTE', 'MONOCYTE', 'NEUTROPHIL']

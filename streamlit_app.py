@@ -36,7 +36,7 @@ def load_my_model():
 
         with st.spinner("Downloading trained model weights... Please wait."):
             try:
-                gdown.download(DRIVE_LINK, MODEL_PATH, quiet=False, fuzzy=True)
+                gdown.download(DRIVE_LINK, MODEL_PATH, quiet=False)
             except Exception as e:
                 st.error(f"Download failed: {e}")
                 return None

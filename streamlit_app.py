@@ -76,39 +76,39 @@ if uploaded_file is not None:
                 st.success(f"Image saved to `{save_path}`")
 
                 # Preprocess image matrix for TensorFlow
-                img_resized = image.resize((224, 224))
-                img_array = tf.keras.preprocessing.image.img_to_array(img_resized) / 255.0
-                img_array = tf.expand_dims(img_array, 0)
+img_resized = image.resize((224, 224))
+img_array = tf.keras.preprocessing.image.img_to_array(img_resized) / 255.0
+img_array = tf.expand_dims(img_array, 0)
 
                 # Execute model prediction
-                raw_preds = model.predict(img_array)[0]
-                predicted_class_idx = int(np.argmax(raw_preds))
-                confidence_score = float(np.max(raw_preds) * 100)
+raw_preds = model.predict(img_array)[0]
+predicted_class_idx = int(np.argmax(raw_preds))
+confidence_score = float(np.max(raw_preds) * 100)
 
-                if predicted_class_idx < len(CLASS_NAMES):
-                    result_label = CLASS_NAMES[predicted_class_idx]
-                else:
-                    result_label = f"Unknown Index ({predicted_class_idx})"
+if predicted_class_idx < len(CLASS_NAMES):
+    result_label = CLASS_NAMES[predicted_class_idx]
+else:
+    result_label = f"Unknown Index ({predicted_class_idx})"
 
-                st.divider()
-                st.subheader("Classification Results")
+st.divider()
+st.subheader("Classification Results")
 
                 # Day 4: Human-in-the-loop Safety Check
-                if confidence_score < CONFIDENCE_THRESHOLD:
-                    st.error("⚠️ **Human Review Required**")
-                    st.warning(
-                        f"The model certainty ({confidence_score:.2f}%) is below the safety cutoff "
-                        f"({CONFIDENCE_THRESHOLD:.0f}%). This image must be reviewed by a specialist."
+if confidence_score < CONFIDENCE_THRESHOLD:
+    st.error("⚠️ **Human Review Required**")
+    st.warning(
+    f"The model certainty ({confidence_score:.2f}%) is below the safety cutoff "
+    f"({CONFIDENCE_THRESHOLD:.0f}%). This image must be reviewed by a specialist."
                     )
-                else:
-                    st.metric(label="Predicted WBC Type", value=result_label)
-                    st.write(f"**Model Certainty:** {confidence_score:.2f}%")
+else:
+    st.metric(label="Predicted WBC Type", value=result_label)
+    st.write(f"**Model Certainty:** {confidence_score:.2f}%")
 
-                st.caption("Note: Certainty represents mathematical confidence, not a guaranteed diagnosis.")
+st.caption("Note: Certainty represents mathematical confidence, not a guaranteed diagnosis.")
 
                 # Day 3: Class breakdown
-                st.subheader("Category Breakdown")
-                for idx, name in enumerate(CLASS_NAMES):
-                    prob = float(raw_preds[idx])
-                    st.write(f"**{name}**: {prob * 100:.2f}%")
-                    st.progress(prob)
+st.subheader("Category Breakdown")
+for idx, name in enumerate(CLASS_NAMES):
+    prob = float(raw_preds[idx])
+    st.write(f"**{name}**: {prob * 100:.2f}%")
+    st.progress(prob)

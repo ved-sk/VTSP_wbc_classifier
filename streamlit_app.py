@@ -15,9 +15,8 @@ st.write("Upload an image of a white blood cell to classify and save it.")
 
 MODEL_PATH = "wbc_model.h5"
 
-# UPDATE THIS: Use a direct shareable Google Drive file URL or direct download link
-# Example format: "https://drive.google.com/uc?id=YOUR_FILE_ID_HERE"
-DRIVE_LINK = "https://google.com"
+DRIVE_FILE_ID = "1HorMh00ZxmilZ9JGs9YyR1MNjUAewEFE"
+DRIVE_LINK = f"https://drive.google.com/uc?id={DRIVE_FILE_ID}"
 
 
 CLASS_NAMES = ['EOSINOPHIL', 'LYMPHOCYTE', 'MONOCYTE', 'NEUTROPHIL']
@@ -68,7 +67,7 @@ if uploaded_file is not None:
             st.error("Cannot perform classification because the model is not loaded.")
         else:
             with st.spinner("Analyzing image..."):
-                # Save image locally
+                # Save uploaded image locally
                 os.makedirs("saved_images", exist_ok=True)
                 save_path = os.path.join("saved_images", uploaded_file.name)
                 with open(save_path, "wb") as f:
@@ -76,39 +75,39 @@ if uploaded_file is not None:
                 st.success(f"Image saved to `{save_path}`")
 
                 # Preprocess image matrix for TensorFlow
-img_resized = image.resize((224, 224))
-img_array = tf.keras.preprocessing.image.img_to_array(img_resized) / 255.0
-img_array = tf.expand_dims(img_array, 0)
+                img_resized = image.resize((224, 224))
+                img_array = tf.keras.preprocessing.image.img_to_array(img_resized) / 255.0
+                img_array = tf.expand_dims(img_array, 0)
 
                 # Execute model prediction
-raw_preds = model.predict(img_array)[0]
-predicted_class_idx = int(np.argmax(raw_preds))
-confidence_score = float(np.max(raw_preds) * 100)
+                raw_preds = model.predict(img_array)[0]
+                predicted_class_idx = int(np.argmax(raw_preds))
+                confidence_score = float(np.max(raw_preds) * 100)
 
-if predicted_class_idx < len(CLASS_NAMES):
-    result_label = CLASS_NAMES[predicted_class_idx]
-else:
-    result_label = f"Unknown Index ({predicted_class_idx})"
+                if predicted_class_idx < len(CLASS_NAMES):
+                    result_label = CLASS_NAMES[predicted_class_idx]
+                else:
+                    result_label = f"Unknown Index ({predicted_class_idx})"
 
-st.divider()
-st.subheader("Classification Results")
+                st.divider()
+                st.subheader("Classification Results")
 
-                # Day 4: Human-in-the-loop Safety Check
-if confidence_score < CONFIDENCE_THRESHOLD:
-    st.error("⚠️ **Human Review Required**")
-    st.warning(
-    f"The model certainty ({confidence_score:.2f}%) is below the safety cutoff "
-    f"({CONFIDENCE_THRESHOLD:.0f}%). This image must be reviewed by a specialist."
+                # Day 4: Human-in-the-Loop Safety Net
+                if confidence_score < CONFIDENCE_THRESHOLD:
+                    st.error("⚠️ **Human Review Required**")
+                    st.warning(
+                        f"The model certainty ({confidence_score:.2f}%) is below the safety cutoff "
+                        f"({CONFIDENCE_THRESHOLD:.0f}%). This image must be reviewed by a specialist."
                     )
-else:
-    st.metric(label="Predicted WBC Type", value=result_label)
-    st.write(f"**Model Certainty:** {confidence_score:.2f}%")
+                else:
+                    st.metric(label="Predicted WBC Type", value=result_label)
+                    st.write(f"**Model Certainty:** {confidence_score:.2f}%")
 
-st.caption("Note: Certainty represents mathematical confidence, not a guaranteed diagnosis.")
+                st.caption("Note: Certainty represents mathematical confidence, not a guaranteed diagnosis.")
 
-                # Day 3: Class breakdown
-st.subheader("Category Breakdown")
-for idx, name in enumerate(CLASS_NAMES):
-    prob = float(raw_preds[idx])
-    st.write(f"**{name}**: {prob * 100:.2f}%")
-    st.progress(prob)
+                # Day 3: Class Breakdown Visuals
+                st.subheader("Category Breakdown")
+                for idx, name in enumerate(CLASS_NAMES):
+                    prob = float(raw_preds[idx])
+                    st.write(f"**{name}**: {prob * 100:.2f}%")
+                    st.progress(prob)

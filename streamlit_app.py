@@ -1,5 +1,5 @@
 import os
-import gdown
+#import gdown
 import numpy as np
 import streamlit as st
 import tensorflow as tf
@@ -13,10 +13,10 @@ st.set_page_config(page_title="WBC Classifier", layout="centered")
 st.title("White Blood Cell Classifier")
 st.write("Upload an image of a white blood cell to classify and save it.")
 
-MODEL_PATH = "wbc_model.h5"
+#MODEL_PATH = "wbc_model.h5"
 
-DRIVE_FILE_ID = "1bI1Q3bVkW5HpbLmRONz6wK8uDR4ukvId"
-DRIVE_LINK = f"https://drive.google.com/uc?id={DRIVE_FILE_ID}"
+#DRIVE_FILE_ID = "1bI1Q3bVkW5HpbLmRONz6wK8uDR4ukvId"
+#DRIVE_LINK = f"https://drive.google.com/uc?id={DRIVE_FILE_ID}"
 
 
 CLASS_NAMES = ['EOSINOPHIL', 'LYMPHOCYTE', 'MONOCYTE', 'NEUTROPHIL']
@@ -25,23 +25,28 @@ CONFIDENCE_THRESHOLD = 75.0  # Day 4 safety threshold percentage
 # ---------------------------------------------------------
 # 2. MODEL LOADING ENGINE
 # ---------------------------------------------------------
+@tf.keras.saving.register_keras_serializable(package="builtins", name="preprocess_input")
+def preprocess_input(x):
+    return x
+
+try:
+    tf.keras.utils.register_keras_serializable(package="Custom", name="preprocess_input")(preprocess_input)
+except AttributeError:
+    pass
+    
+MODEL_PATH = "wbc_model.h5"
+
 @st.cache_resource
 def load_my_model():
     if not os.path.exists(MODEL_PATH):
-        # Prevent gdown from trying to download an invalid placeholder URL
-        if "YOUR_FILE_ID_HERE" in DRIVE_LINK or DRIVE_LINK == "https://drive.google.com":
-            st.error("⚠️ Drive link is not configured. Please set a valid shareable file URL in `DRIVE_LINK`.")
-            return None
-
-        with st.spinner("Downloading trained model weights... Please wait."):
-            try:
-                gdown.download(DRIVE_LINK, MODEL_PATH, quiet=False)
-            except Exception as e:
-                st.error(f"Download failed: {e}")
-                return None
-
+        st.error(f"⚠️ Model file '{MODEL_PATH}' was not found in the repository root directory.")
+        return None
     try:
-        return tf.keras.models.load_model(MODEL_PATH)
+        custom_dict = {
+            "preprocess_input": preprocess_input,
+            "function": preprocess_input
+        }
+        return tf.keras.models.load_model(MODEL_PATH, compile=False, custom_objects=custom_dict)
     except Exception as e:
         st.error(f"Failed to load model file: {e}")
         return None

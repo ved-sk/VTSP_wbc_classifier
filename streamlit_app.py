@@ -25,13 +25,13 @@ CONFIDENCE_THRESHOLD = 75.0  # Day 4 safety threshold percentage
 # ---------------------------------------------------------
 # 2. MODEL LOADING ENGINE
 # ---------------------------------------------------------
-tf.keras.saving.register_keras_serializable(package="builtins", name="preprocess_input")
+@tf.keras.utils.register_keras_serializable(package="builtins", name="preprocess_input")
 def preprocess_input(x):
     return x
 
 MODEL_PATH = "wbc_model.h5"
 
-st.cache_resource
+@st.cache_resource
 def load_my_model():
     if not os.path.exists(MODEL_PATH):
         st.error(f"⚠️ Model file '{MODEL_PATH}' was not found in the repository root directory.")

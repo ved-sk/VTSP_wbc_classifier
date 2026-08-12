@@ -79,10 +79,17 @@ if uploaded_file is not None:
                 img_array = tf.keras.preprocessing.image.img_to_array(img_resized) / 255.0
                 img_array = tf.expand_dims(img_array, 0)
 
-                # Execute model prediction
-                raw_preds = model.predict(img_array)[0]
-                predicted_class_idx = int(np.argmax(raw_preds))
-                confidence_score = float(np.max(raw_preds) * 100)
+                # Get raw model prediction
+                raw_outputs = model.predict(img_array)[0]
+
+                # Convert unnormalized logits to probabilities using Softmax if needed
+                if np.max(raw_outputs) > 1.0 or np.min(raw_outputs) < 0.0:
+                    probabilities = tf.nn.softmax(raw_outputs).numpy()
+                else:
+                    probabilities = raw_outputs
+
+                predicted_class_idx = int(np.argmax(probabilities))
+                confidence_score = float(np.max(probabilities) * 100)
 
                 if predicted_class_idx < len(CLASS_NAMES):
                     result_label = CLASS_NAMES[predicted_class_idx]
@@ -92,7 +99,7 @@ if uploaded_file is not None:
                 st.divider()
                 st.subheader("Classification Results")
 
-                # Day 4: Human-in-the-Loop Safety Net
+                # Day 4: Human-in-the-Loop Safety Check
                 if confidence_score < CONFIDENCE_THRESHOLD:
                     st.error("⚠️ **Human Review Required**")
                     st.warning(
@@ -108,6 +115,7 @@ if uploaded_file is not None:
                 # Day 3: Class Breakdown Visuals
                 st.subheader("Category Breakdown")
                 for idx, name in enumerate(CLASS_NAMES):
-                    prob = float(raw_preds[idx])
+                    # Ensure probability is strictly bounded between 0.0 and 1.0 for st.progress
+                    prob = float(np.clip(probabilities[idx], 0.0, 1.0))
                     st.write(f"**{name}**: {prob * 100:.2f}%")
                     st.progress(prob)

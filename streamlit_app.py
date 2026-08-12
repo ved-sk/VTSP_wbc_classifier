@@ -15,7 +15,8 @@ st.write("Upload an image of a white blood cell to classify and save it.")
 
 MODEL_PATH = "wbc_model.h5"
 
-DRIVE_FILE_ID = "1HorMh00ZxmilZ9JGs9YyR1MNjUAewEFE"
+https://drive.google.com/file/d/1bI1Q3bVkW5HpbLmRONz6wK8uDR4ukvId/view?usp=drive_link
+DRIVE_FILE_ID = "1bI1Q3bVkW5HpbLmRONz6wK8uDR4ukvId"
 DRIVE_LINK = f"https://drive.google.com/uc?id={DRIVE_FILE_ID}"
 
 
